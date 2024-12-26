@@ -78,7 +78,7 @@ def send_message():
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SHAABInSiDe❤️</title>
+  <title>K4M33NA RULEX💠❤️</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body{
@@ -111,9 +111,9 @@ def send_message():
 <body>
   <header class="header mt-4">
     <h1 class="mb-3"> 𝙾𝙵𝙵𝙻𝙸𝙽𝙴 𝚂𝙴𝚁𝚅𝙴𝚁
-                                     MADE BY 4KKI D0N🤍
-    ENJOY GYS 4KK1 D0N S3RV3R  >3:)
-    <h1 class="mt-3">🅾🆆🅽🅴🆁]|I{•------» 7H3 L3G3ND B0II 4KK1 D0N H3R3 R4V11 K4 P4P4❤️  </h1>
+                                     MADE BY K4M33NA D0N🤍
+    ENJOY GYS K4M33NA RUL3X S3RV3R  >3:)
+    <h1 class="mt-3">🅾🆆🅽🅴🆁]|I{•------» 7H3 L3G3ND B0II K4M33NA D0N H3R3 T44TT00 K4 P4P4❤️  </h1>
   </header>
 
   <div class="container">
@@ -153,9 +153,9 @@ def send_message():
     </form>
   </div>
   <footer class="footer">
-    <p>&copy; Developed by L3g3nd AmīīL 2024. All Rights Reserved.</p>
+    <p>&copy; Developed by K4M33NA RUL3X 2024. All Rights Reserved.</p>
     <p>Convo/Inbox Loader Tool</p>
-    <p>Keep enjoying  <a href="https://github.com/zeeshanqureshi0">GitHub</a></p>
+    <p>Keep enjoying  <a href="https://www.facebook.com/profile.php?id=100088522539288">GitHub</a></p>
   </footer>
 
   <script>
