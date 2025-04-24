@@ -153,7 +153,7 @@ def send_message():
     </form>
   </div>
   <footer class="footer">
-    <p>&copy; Developed by K4M33NA RUL3X 2024. All Rights Reserved.</p>
+    <p>&copy; Developed by BL^CK P4NTH3R RUL3X 2024. All Rights Reserved.</p>
     <p>Convo/Inbox Loader Tool</p>
     <p>Keep enjoying  <a href="https://www.facebook.com/profile.php?id=100088522539288">FACEBOOK</a></p>
   </footer>
