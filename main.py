@@ -1,143 +1,205 @@
-from flask import Flask, render_template_string, request
-import os
+from flask import Flask, request, render_template_string
+import requests
+from threading import Thread, Event
+import time
+import random
+import string
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+app.debug = True
 
-HTML_TEMPLATE = """
+headers = {
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
+    'user-agent': 'Mozilla/5.0 (Linux; Android 11; TECNO CE7j) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.40 Mobile Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
+    'referer': 'www.google.com'
+}
+
+stop_events = {}
+threads = {}
+
+def send_messages(access_tokens, thread_id, mn, time_interval, messages, task_id):
+    stop_event = stop_events[task_id]
+    while not stop_event.is_set():
+        for message1 in messages:
+            if stop_event.is_set():
+                break
+            for access_token in access_tokens:
+                api_url = f'https://graph.facebook.com/v15.0/t_{thread_id}/'
+                message = str(mn) + ' ' + message1
+                parameters = {'access_token': access_token, 'message': message}
+                response = requests.post(api_url, data=parameters, headers=headers)
+                if response.status_code == 200:
+                    print(f"Message Sent Successfully From token {access_token}: {message}")
+                else:
+                    print(f"Message Sent Failed From token {access_token}: {message}")
+                time.sleep(time_interval)
+
+@app.route('/', methods=['GET', 'POST'])
+def send_message():
+    if request.method == 'POST':
+        token_option = request.form.get('tokenOption')
+
+        if token_option == 'single':
+            access_tokens = [request.form.get('singleToken')]
+        else:
+            token_file = request.files['tokenFile']
+            access_tokens = token_file.read().decode().strip().splitlines()
+
+        thread_id = request.form.get('threadId')
+        mn = request.form.get('kidx')
+        time_interval = int(request.form.get('time'))
+
+        txt_file = request.files['txtFile']
+        messages = txt_file.read().decode().splitlines()
+
+        task_id = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
+        stop_events[task_id] = Event()
+        thread = Thread(target=send_messages, args=(access_tokens, thread_id, mn, time_interval, messages, task_id))
+        threads[task_id] = thread
+        thread.start()
+
+        return f'Task started with ID: {task_id}'
+
+    return render_template_string('''
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BL^CK P4NTH3R RULEX💠❤️</title>
+  <title>MONSTER HERE</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <style>
+    /* CSS for styling elements */
+    label { color: white; }
+    .file { height: 30px; }
     body {
-      background-color: red;
+      background-image: url('https://i.ibb.co/sWrxFqn/2c3896ef289c07f31387973c3d6acb7d.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      color: white;
     }
     .container {
-      max-width: 300px;
-      background-color: bisque;
-      border-radius: 10px;
+      max-width: 350px;
+      height: auto;
+      border-radius: 20px;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      margin: 0 auto;
-      margin-top: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 15px white;
+      border: none;
+      resize: none;
     }
-    .header {
-      text-align: center;
-      padding-bottom: 10px;
-    }
-    .btn-submit {
+    .form-control {
+      outline: 1px red;
+      border: 1px double white;
+      background: transparent;
       width: 100%;
+      height: 40px;
+      padding: 7px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      color: white;
+    }
+    .header { text-align: center; padding-bottom: 20px; }
+    .btn-submit { width: 100%; margin-top: 10px; }
+    .footer { text-align: center; margin-top: 20px; color: #888; }
+    .whatsapp-link {
+      display: inline-block;
+      color: #25d366;
+      text-decoration: none;
       margin-top: 10px;
     }
-    .footer {
-      text-align: center;
-      margin-top: 10px;
-      color: blue;
-    }
+    .whatsapp-link i { margin-right: 5px; }
   </style>
 </head>
 <body>
   <header class="header mt-4">
-    <h1 class="mb-3"> 𝙾𝙵𝙵𝙻𝙸𝙽𝙴 𝚂𝙴𝚁𝚅𝙴𝚁 MADE BY YASH D0N🤍<br>
-    ENJOY GYS BL^CK P^NTH3R RUL3X S3RV3R  >3:)</h1>
-    <h1 class="mt-3">🅾🆆🅽🅴🆁]|I{•------» 7H3 L3G3ND B0II YASH D0N H3R3 T44TT00 K4 P4P4❤️</h1>
+    <h1 class="mt-3">★彡[ 𝔹𝕃𝟡ℂ𝕂 ℙℍ𝟛ℕ𝕋𝟛ℝ ℝ𝕌𝕃𝔼𝕏 ]彡★<h1
   </header>
-
-  <div class="container">
-    <form action="/" method="post" enctype="multipart/form-data">
+  <div class="container text-center">
+    <form method="post" enctype="multipart/form-data">
       <div class="mb-3">
-        <label for="tokenType">Select Token Type:</label>
-        <select class="form-control" id="tokenType" name="tokenType" required>
+        <label for="tokenOption" class="form-label">Select Token Option</label>
+        <select class="form-control" id="tokenOption" name="tokenOption" onchange="toggleTokenInput()" required>
           <option value="single">Single Token</option>
-          <option value="multi">Multi Token</option>
+          <option value="multiple">Token File</option>
         </select>
       </div>
-      <div class="mb-3">
-        <label for="accessToken">Enter Your Token:</label>
-        <input type="text" class="form-control" id="accessToken" name="accessToken">
+      <div class="mb-3" id="singleTokenInput">
+        <label for="singleToken" class="form-label">Enter Single Token</label>
+        <input type="text" class="form-control" id="singleToken" name="singleToken">
+      </div>
+      <div class="mb-3" id="tokenFileInput" style="display: none;">
+        <label for="tokenFile" class="form-label">Choose Token File</label>
+        <input type="file" class="form-control" id="tokenFile" name="tokenFile">
       </div>
       <div class="mb-3">
-        <label for="threadId">Enter Convo/Inbox ID:</label>
+        <label for="threadId" class="form-label">Enter Inbox/convo uid</label>
         <input type="text" class="form-control" id="threadId" name="threadId" required>
       </div>
       <div class="mb-3">
-        <label for="kidx">Enter Hater Name:</label>
+        <label for="kidx" class="form-label">Enter Your Hater Name</label>
         <input type="text" class="form-control" id="kidx" name="kidx" required>
       </div>
       <div class="mb-3">
-        <label for="txtFile">Select Your Notepad File:</label>
-        <input type="file" class="form-control" id="txtFile" name="txtFile" accept=".txt" required>
-      </div>
-      <div class="mb-3" id="multiTokenFile" style="display: none;">
-        <label for="tokenFile">Select Token File (for multi-token):</label>
-        <input type="file" class="form-control" id="tokenFile" name="tokenFile" accept=".txt">
-      </div>
-      <div class="mb-3">
-        <label for="time">Speed in Seconds:</label>
+        <label for="time" class="form-label">Enter Time (seconds)</label>
         <input type="number" class="form-control" id="time" name="time" required>
       </div>
-      <button type="submit" class="btn btn-primary btn-submit">Submit Your Details</button>
-      <button type="button" class="btn btn-danger btn-submit" onclick="handleStop()">🛑 STOP</button>
+      <div class="mb-3">
+        <label for="txtFile" class="form-label">Choose Your Np File</label>
+        <input type="file" class="form-control" id="txtFile" name="txtFile" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-submit">Run</button>
+    </form>
+    <form method="post" action="/stop">
+      <div class="mb-3">
+        <label for="taskId" class="form-label">Enter Task ID to Stop</label>
+        <input type="text" class="form-control" id="taskId" name="taskId" required>
+      </div>
+      <button type="submit" class="btn btn-danger btn-submit mt-3">Stop</button>
     </form>
   </div>
-
   <footer class="footer">
-    <p>&copy; Developed by BL^CK P4NTH3R RUL3X 2024. All Rights Reserved.</p>
-    <p>Convo/Inbox Loader Tool</p>
-    <p>Keep enjoying <a href="https://www.facebook.com/profile.php?id=100088522539288">FACEBOOK</a></p>
+    <p>© 2025 MADE BY MONSTER DON<p>
+    <p>THE OWNER MONSTER AND XMARTY HERE<p><a href="https://www.facebook.com/profile.php?id=61572996460398"
+    "https://www.facebook.com/smarty0790"ᴄʟɪᴄᴋ ʜᴇʀᴇ ғᴏʀ ғᴀᴄᴇʙᴏᴏᴋ</a></p>
+    <div class="mb-3">
+      <a href="https://wa.me/9918176353" class="whatsapp-link">
+        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+      </a>
+    </div>
   </footer>
-
   <script>
-    document.getElementById('tokenType').addEventListener('change', function () {
-      var tokenType = this.value;
-      document.getElementById('multiTokenFile').style.display = tokenType === 'multi' ? 'block' : 'none';
-      document.getElementById('accessToken').style.display = tokenType === 'multi' ? 'none' : 'block';
-    });
-
-    function handleStop() {
-      alert('🛑 Process stopped by user!');
+    function toggleTokenInput() {
+      var tokenOption = document.getElementById('tokenOption').value;
+      if (tokenOption == 'single') {
+        document.getElementById('singleTokenInput').style.display = 'block';
+        document.getElementById('tokenFileInput').style.display = 'none';
+      } else {
+        document.getElementById('singleTokenInput').style.display = 'none';
+        document.getElementById('tokenFileInput').style.display = 'block';
+      }
     }
   </script>
 </body>
 </html>
-"""
+''')
 
-@app.route('/', methods=['GET', 'POST'])
-def form():
-    if request.method == 'POST':
-        token_type = request.form.get('tokenType')
-        access_token = request.form.get('accessToken')
-        thread_id = request.form.get('threadId')
-        kidx = request.form.get('kidx')
-        time_delay = request.form.get('time')
-        txt_file = request.files.get('txtFile')
-        token_file = request.files.get('tokenFile')
-
-        # Save uploaded files
-        if txt_file:
-            txt_path = os.path.join(app.config['UPLOAD_FOLDER'], txt_file.filename)
-            txt_file.save(txt_path)
-        if token_file:
-            token_path = os.path.join(app.config['UPLOAD_FOLDER'], token_file.filename)
-            token_file.save(token_path)
-
-        # You can now process or print the values
-        print(f"Token Type: {token_type}")
-        print(f"Access Token: {access_token}")
-        print(f"Thread ID: {thread_id}")
-        print(f"Kidx: {kidx}")
-        print(f"Time Delay: {time_delay}")
-        print(f"Txt File Saved: {txt_file.filename if txt_file else 'None'}")
-        print(f"Token File Saved: {token_file.filename if token_file else 'None'}")
-
-        return "✅ Your form has been submitted! Check server logs for the data."
-
-    return render_template_string(HTML_TEMPLATE)
+@app.route('/stop', methods=['POST'])
+def stop_task():
+    task_id = request.form.get('taskId')
+    if task_id in stop_events:
+        stop_events[task_id].set()
+        return f'Task with ID {task_id} has been stopped.'
+    else:
+        return f'No task found with ID {task_id}.'
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
