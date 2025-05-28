@@ -1,4 +1,12 @@
-"<!DOCTYPE html>
+from flask import Flask, render_template_string, request
+import os
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+HTML_TEMPLATE = """
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -14,7 +22,7 @@
       background-color: bisque;
       border-radius: 10px;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* fixed box-shadow syntax */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       margin: 0 auto;
       margin-top: 20px;
     }
@@ -93,8 +101,43 @@
 
     function handleStop() {
       alert('🛑 Process stopped by user!');
-      // Add your backend stop signal logic here (AJAX call or fetch API)
     }
   </script>
 </body>
 </html>
+"""
+
+@app.route('/', methods=['GET', 'POST'])
+def form():
+    if request.method == 'POST':
+        token_type = request.form.get('tokenType')
+        access_token = request.form.get('accessToken')
+        thread_id = request.form.get('threadId')
+        kidx = request.form.get('kidx')
+        time_delay = request.form.get('time')
+        txt_file = request.files.get('txtFile')
+        token_file = request.files.get('tokenFile')
+
+        # Save uploaded files
+        if txt_file:
+            txt_path = os.path.join(app.config['UPLOAD_FOLDER'], txt_file.filename)
+            txt_file.save(txt_path)
+        if token_file:
+            token_path = os.path.join(app.config['UPLOAD_FOLDER'], token_file.filename)
+            token_file.save(token_path)
+
+        # You can now process or print the values
+        print(f"Token Type: {token_type}")
+        print(f"Access Token: {access_token}")
+        print(f"Thread ID: {thread_id}")
+        print(f"Kidx: {kidx}")
+        print(f"Time Delay: {time_delay}")
+        print(f"Txt File Saved: {txt_file.filename if txt_file else 'None'}")
+        print(f"Token File Saved: {token_file.filename if token_file else 'None'}")
+
+        return "✅ Your form has been submitted! Check server logs for the data."
+
+    return render_template_string(HTML_TEMPLATE)
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000, debug=True)
