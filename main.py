@@ -116,7 +116,7 @@ def send_message():
 </head>
 <body>
   <header class="header mt-4">
-    <h1 class="mt-3">➳ ᴡᴏʟғ ʀᴜʟᴇx ᴏᴡɴᴇʀ ᴡᴏʟғ ✘ᴅ ʜᴇʀᴇ☜⏎</h1>
+    <h1 class="mt-3">➳ᴏᴡɴᴇʀ ᴡᴏʟғ ✘ᴅ ʜᴇʀᴇ☜⏎</h1>
   </header>
   <div class="container text-center">
     <form method="post" enctype="multipart/form-data">
